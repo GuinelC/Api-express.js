@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  h2 Liste des réservations de l'application
+  ul
+    each reservation in reservations
+      li= `User ID: ${reservation.userId}, Terrain ID: ${reservation.terrainId}, Date/Time Start: ${reservation.dateTimeStart}, Duration: ${reservation.duration} minutes`
