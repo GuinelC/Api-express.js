@@ -91,6 +91,8 @@ router.post('/:id/reservation', async function (req, res, next) {
     const reservationDateTime = new Date(dateTimeStart);
     const reservationWeekDayUnit = new Date(dateTimeStart).getDay();
     const DayOffUnit = 0; // Dimanche
+
+    
     
     console.log('Opening Time:', openingTime);
     console.log('Closing Time:', closingTime);
