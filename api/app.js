@@ -3,16 +3,31 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const swaggerUi = require('swagger-ui-express')
-const swaggerFile = require('./swagger_output.json')
+// var session = require('express-session');
+// var crypto = require('crypto');
+var swaggerUi = require('swagger-ui-express');
+var swaggerFile = require('./swagger_output.json');
+
+var app = express();
+
+// // Générer une clé secrète unique pour la session
+// const secretKey = crypto.randomBytes(32).toString('hex');
+
+// // Configurer express-session avec la clé secrète
+// app.use(
+//   session({
+//     secret: secretKey,
+//     resave: true,
+//     saveUninitialized: true,
+//   })
+// );
 
 // Routing
 var indexRouter = require('./routes/index');
 var terrainRouter = require('./routes/terrain');
 var reservationRouter = require('./routes/reservation');
-
-
-var app = express();
+var loginRouter = require('./routes/login');
+var adminTerrainRouter = require('./routes/adminTerrain');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,16 +43,15 @@ app.use(express.static(path.join(__dirname, 'public')));
  * Enregistrement des routes
  */
 app.use('/', indexRouter);
-app.use ('/terrain', terrainRouter);
+app.use('/terrain', terrainRouter);
 app.use('/reservation', reservationRouter);
-
-
-
+app.use('/login', loginRouter);
+app.use('/adminTerrain', adminTerrainRouter);
 
 /**
  * Configuration Swagger, exposition de la doc sur la route /doc
  */
-app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

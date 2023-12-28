@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1= title
+
+  h1= "Login Page"
+
+  form(action='/login', method='post')
+    label(for='pseudo') Pseudo:
+    input(type='text', name='pseudo', required)
+    br
+    label(for='password') Password:
+    input(type='password', name='password', required)
+    br
+    button(type='submit') Connexion
+
+  if message
+    p= message
+
+  if error 
+  p= error  
