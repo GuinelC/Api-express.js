@@ -3,11 +3,8 @@ const router = express.Router();
 const db = require('../db');
 const hal = require('../hal');
 
-module.exports = router;
-
 // GET all reservations
 router.get('/', async function (req, res, next) {
-
     const conn = await db.mysql.createConnection(db.dsn);
   
     try {
@@ -16,14 +13,20 @@ router.get('/', async function (req, res, next) {
   
       const reservations = rows.map(element => {
         return {
-          userId: element.User_ID,
-          terrainId: element.Terrain_ID,
-          dateTimeStart: element.DateTimeStart,
-          duration: element.Duration
+          ID: element.ID,
+          User_ID: element.User_ID,
+          Terrain_ID: element.Terrain_ID,
+          DateTimeStart: element.DateTimeStart,
+          Duration: element.Duration
         };
       });
-      
-      res.render('reservation', { title: 'Liste des réservations', reservations:reservations });
+  
+      const halReservations = reservations.map(reservation => {
+        return hal.mapAllReservationResourceObject(reservation, req.baseUrl);
+    });
+  
+      res.set('Content-Type', 'application/hal+json');
+      res.status(200).json(halReservations);
   
     } catch (error) {
       console.error('Error connecting: ' + error.stack);
@@ -35,8 +38,10 @@ router.get('/', async function (req, res, next) {
     }
   });
 
-  // GET details of a specific reservation
-  router.get('/:id', async function (req, res, next) {
+
+
+// GET details de la réservation par ID
+router.get('/:id', async function (req, res, next) {
     const reservationId = req.params.id;
     const conn = await db.mysql.createConnection(db.dsn);
   
@@ -44,7 +49,7 @@ router.get('/', async function (req, res, next) {
       // Récupération des détails de la réservation spécifiée par l'ID
       const [reservationRows] = await conn.execute('SELECT * FROM Reservation WHERE ID = ?', [reservationId]);
   
-      // Si une réservation est trouvée, la renvoyer en format JSON
+      // Si une réservation est trouvée, la renvoyer en format HAL
       if (reservationRows.length > 0) {
         const reservationDetails = {
           ID: reservationRows[0].ID,
@@ -54,7 +59,10 @@ router.get('/', async function (req, res, next) {
           Duration: reservationRows[0].Duration
         };
   
-        res.status(200).json(reservationDetails);
+        const halReservation = hal.mapReservationResourceObject(reservationDetails, req.baseUrl);
+  
+        res.set('Content-Type', 'application/hal+json');
+        res.status(200).json(halReservation);
       } else {
         // Si aucune réservation n'est trouvée, renvoyer une réponse appropriée
         res.status(404).json({ "msg": "Reservation not found." });
@@ -66,8 +74,10 @@ router.get('/', async function (req, res, next) {
       conn.end();
     }
   });
+  
 
-  // PUT update details of a specific reservation
+
+// PUT update details of a specific reservation
 router.put('/:id', async function (req, res, next) {
     const reservationId = req.params.id;
     const { userId, terrainId, dateTimeStart, duration } = req.body;
@@ -99,9 +109,18 @@ router.put('/:id', async function (req, res, next) {
         conn.end();
     }
 });
+    // EXEMPLE REQUETE CURL PUT \\ 
+    // curl -X PUT -H "Content-Type: application/json" -d '{
+    //     "userId": 2,
+    //     "terrainId": 1,
+    //     "dateTimeStart": "2023-01-02 15:30:00",
+    //     "duration": 45
+    //   }' http://localhost:5001/reservation/2
 
 
-  // DELETE a specific reservation
+
+    
+// DELETE a specific reservation
 router.delete('/:id', async function (req, res, next) {
     const reservationId = req.params.id;
     const conn = await db.mysql.createConnection(db.dsn);
@@ -131,20 +150,11 @@ router.delete('/:id', async function (req, res, next) {
       conn.end();
     }
   });
+  // EXEMPLE REQUETE CURL DELETE \\ 
+  // curl -X DELETE http://localhost:5001/reservation/2
   
 
+  module.exports = router;
 
-//   EXEMPLE REQUETE CURL \\ 
-
-    // curl -X POST -H "Content-Type: application/json" -d '{"userId": 1, "dateTimeStart": "2023-01-01T14:00:00", "duration": 45}' http://localhost:5001/terrain/2/reservation
-
-    // curl -X PUT -H "Content-Type: application/json" -d '{
-    //     "userId": 2,
-    //     "terrainId": 1,
-    //     "dateTimeStart": "2023-01-02 15:30:00",
-    //     "duration": 45
-    //   }' http://localhost:5001/reservation/2
-
-    // curl -X DELETE http://localhost:5001/reservation/2
 
 

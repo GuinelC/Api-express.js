@@ -20,7 +20,7 @@ router.get('/', async function (req, res) {
   
       res.render('adminTerrain', { terrains });
     } catch (error) {
-      console.error('Error fetching terrain data:', error); // Ajoutez cette ligne pour voir l'erreur dans la console
+      console.error('Error fetching terrain data:', error);
       res.status(500).json({ "msg": "Nous rencontrons des difficultés, merci de réessayer plus tard." });
     } finally {
       conn.end();
@@ -31,10 +31,11 @@ router.get('/', async function (req, res) {
 
 
 // PUT update Dispo for a specific terrain
-router.put('/update/:terrainId', async function (req, res) {
+router.put('/update/:id', async function (req, res) {
     const terrainId = req.params.terrainId;
       
     const conn = await db.mysql.createConnection(db.dsn);
+    console.log("fail")
     
     try {
       // Récupérez la valeur actuelle de Dispo

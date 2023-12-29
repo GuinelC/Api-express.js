@@ -34,7 +34,6 @@ router.get("/", async function (req, res, next) {
 });
 
 router.post("/", async function (req, res, next) {
-    console.log('début post');
     const conn = await db.mysql.createConnection(db.dsn);
    
     const { pseudo, password } = req.body; // Utilisez pseudo au lieu de username

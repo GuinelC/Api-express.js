@@ -3,6 +3,7 @@
 Un *starter pack* dockerisé d'une application web node.js pour développer une web API RESTful. L'API vient avec un service de base de données relationnelles (MySQL) et un client graphique (Adminer).
 
 - [Starter pack: *RESTful* web API avec Node.js, Express.js, MySQL et Adminer](#starter-pack-restful-web-api-avec-nodejs-expressjs-mysql-et-adminer)
+
   - [Prérequis](#prérequis)
   - [Lancer le projet avec Compose](#lancer-le-projet-avec-compose)
   - [Tester](#tester)
@@ -13,14 +14,12 @@ Un *starter pack* dockerisé d'une application web node.js pour développer une 
     - [ORM](#orm)
   - [Debuger lors du développement](#debuger-lors-du-développement)
     - [En ligne de commande avec docker](#en-ligne-de-commande-avec-docker)
-    - [Avec Visual Studio Code](#avec-visual-studio-code)
   - [Documentation de l'API avec Swagger](#documentation-de-lapi-avec-swagger)
   - [Installer et servir de nouvelles dépendances](#installer-et-servir-de-nouvelles-dépendances)
   - [Arrêter le projet](#arrêter-le-projet)
   - [Améliorations](#améliorations)
   - [Conseils pour le développement](#conseils-pour-le-développement)
   - [Modules Node.Js notables](#modules-nodejs-notables)
-  - [Autorisation avec JWT](#autorisation-avec-jwt)
   - [Ressources](#ressources)
     - [Docker](#docker)
     - [Express](#express)
@@ -35,16 +34,11 @@ Un *starter pack* dockerisé d'une application web node.js pour développer une 
 - installer [Docker](https://www.docker.com/get-started/) et [Compose](https://docs.docker.com/compose/)
 - clôner le dépôt et se placer à la racine du projet
 
->N'oubliez pas de supprimer le dossier `.git` si vous désirez créer votre propre dépôt à partir des sources
-
-~~~
-rm -R .git
-git init
-~~~
 
 ## Lancer le projet avec Compose
 
 Dupliquer le fichier `.env.dist`
+Pour obtenir `.env`
 
 ~~~
 cp .env.dist .env
@@ -71,7 +65,8 @@ docker-compose up -d
 
 ### API
 
-Se rendre à l'URL [localhost:5001](http://localhost:5001), ou tester (avec [curl](https://curl.se/))
+Se rendre à l'URL [localhost:5001](http://localhost:5001)
+ou tester (avec [curl](https://curl.se/))
 
 ~~~
 # Web humain (HTML)
@@ -167,10 +162,6 @@ Inspecter les *logs* du conteneur Docker qui contiennent tout ce qui est écrit 
 docker logs -f demo-rest-api-api 
 ~~~
 
-### Avec Visual Studio Code
-
-- Installer l'[extension officielle Docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
-- Click droit sur le conteneur `demo-rest-api-api` qui héberge l'application Node.js,  puis `View Logs`
 
 ## Documentation de l'API avec Swagger
 
@@ -208,7 +199,7 @@ docker-compose down
 
 ## Améliorations
 
-Se débarrasser des étapes *avant* la dockerisation du projet (installation des dépendances). Le problème réside dans le fait que le volume monté *écrase* les fichiers lors de la construction de l'image. On ne peut donc pas en l'état simplement les déplacer dans l'image Docker.
+Il restes des choses à faire...
 
 ## Conseils pour le développement
 
@@ -224,11 +215,9 @@ Se débarrasser des étapes *avant* la dockerisation du projet (installation des
 - [cors](https://www.npmjs.com/package/cors), un module middleware pour gérer la politique CORS (*Cross Origin Resource Sharing*)
 - [mysql2](https://www.npmjs.com/package/mysql2), un client MySQL pour Node.js qui [utilise l'API des promesses](https://www.npmjs.com/package/mysql2#using-promise-wrapper) (contrairement à son prédécesseur [mysql](https://www.npmjs.com/package/mysql))
 
-## Autorisation avec JWT
+## Gestions des rôles
+  L'Administrateur n'a pas le même rôle, donc il pourra effectuer d'autres actions qu'un user classique.
 
->JSON Web Token (JWT) is a compact, URL-safe means of *representing claims to be transferred between two parties* (Source: RFC7519)
-
-Pour **autoriser** (et donc authentifier) l'utilisateur à interagir avec les ressources, on utilise un JSON Web Token. Implémentée dans le projet avec le package [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 
 ## Ressources
 
@@ -262,5 +251,14 @@ Pour **autoriser** (et donc authentifier) l'utilisateur à interagir avec les re
 
 ### Adminer
 
+Pour la base de donnée:
 - [Adminer](https://www.adminer.org/)
 # Api-express.js
+
+* Test des requêttes en CURL -> 
+
+- User : 
+- Terrain :
+- Reservation :
+
+

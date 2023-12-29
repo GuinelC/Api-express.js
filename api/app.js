@@ -3,29 +3,16 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-// var session = require('express-session');
-// var crypto = require('crypto');
 var swaggerUi = require('swagger-ui-express');
 var swaggerFile = require('./swagger_output.json');
 
 var app = express();
 
-// // Générer une clé secrète unique pour la session
-// const secretKey = crypto.randomBytes(32).toString('hex');
-
-// // Configurer express-session avec la clé secrète
-// app.use(
-//   session({
-//     secret: secretKey,
-//     resave: true,
-//     saveUninitialized: true,
-//   })
-// );
-
 // Routing
 var indexRouter = require('./routes/index');
 var terrainRouter = require('./routes/terrain');
 var reservationRouter = require('./routes/reservation');
+var userRouter = require('./routes/user');
 var loginRouter = require('./routes/login');
 var adminTerrainRouter = require('./routes/adminTerrain');
 
@@ -44,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
  */
 app.use('/', indexRouter);
 app.use('/terrain', terrainRouter);
+app.use('/user', userRouter);
 app.use('/reservation', reservationRouter);
 app.use('/login', loginRouter);
 app.use('/adminTerrain', adminTerrainRouter);

@@ -25,36 +25,105 @@ function halLinkObject(url, type = '', name = '', templated = false, deprecation
 }
 
 
+// TERRAIN ALL
+function mapAllTerrainResourceObject(dataTerrain, baseURL){
+    console.log(dataTerrain);
+    return {
+        "_links": {
+            "self": halLinkObject(baseURL, 'string'), 
+        },
+        "ID": dataTerrain.ID,
+        "Name": dataTerrain.TerrainName,
+        "OpeningTime": dataTerrain.OpeningTime,
+        "ClosingTime": dataTerrain.ClosingTime,
+        "DaysOff": dataTerrain.DaysOff,
+        "Dispo": dataTerrain.Dispo
+    };
+}
+
+
+/**
+ * Mappe les données d'un terrain en un objet conforme à la spécification HAL
+ * @param {object} terrainData 
+ * @param {string} baseURL 
+ * @returns {object}
+*/
+
+
+// TERRAIN : ID
 function mapTerrainResourceObject(terrainData, baseURL) {
     return {
         "_links": {
             "self": halLinkObject(baseURL + '/' + terrainData.ID, 'string')
+            
         },
         "ID": terrainData.ID,
         "name": terrainData.Name,
         "Ouverture": terrainData.OpeningTime,
         "Fermeture": terrainData.ClosingTime,
         "Jour De Fermeture": terrainData.DaysOff,
-        // Ajoutez d'autres propriétés de terrain au besoin
     };
 }
 
+// RESERVATION : ALL
+function mapAllReservationResourceObject(data, baseURL) {
+    console.log(data);
+    return {
+        "_links": {
+            "self": halLinkObject(baseURL, 'string'), 
+        },
+        "ID": data.ID,
+        "User" : data.User_ID,
+        "Terrain" : data.Terrain_ID,
+        "DateTimeStart": data.DateTimeStart,
+        "Duration": data.Duration,
+    };
+}
 
+// RESERVATION : ID
 function mapReservationResourceObject(data, baseURL) {
     console.log(data);
     return {
         "_links": {
-            "self": halLinkObject(`${baseURL}/terrain/${data.Terrain_ID}/reservations/${data.ID}`, 'string'),
-            "terrain": halLinkObject(`${baseURL}/terrain/${data.Terrain_ID}`, 'string'),
+            "self": halLinkObject(baseURL + '/' + data.ID, 'string'),
+            "terrain": halLinkObject(baseURL + '/' + 'terrain' + '/' + data.Terrain_ID, 'string'),
             // Ajoutez d'autres liens pertinents au besoin
         },
         "ID": data.ID,
+        "User" : data.User_ID,
+        "Terrain" : data.Terrain_ID,
         "DateTimeStart": data.DateTimeStart,
-        "DateTimeEnd": data.DateTimeEnd,
         "Duration": data.Duration,
         // Ajoutez d'autres propriétés de réservation au besoin
     };
 }
 
 
-module.exports = { halLinkObject, mapTerrainResourceObject, mapReservationResourceObject };
+// USER : ALL
+function mapAllUserResourceObject(dataUser, baseURL) {
+    console.log(dataUser);
+    return {
+        "_links": {
+            "self": { "href": baseURL + '/' + dataUser.ID },
+        },
+        "ID": dataUser.ID,
+        "Name": dataUser.Name,
+        // Ajoutez d'autres propriétés utilisateur au besoin
+    };
+}
+
+// USER : ID
+function mapUserIdResourceObject(dataUser, baseURL) {
+    console.log(dataUser);
+    return {
+        "_links": {
+            "self": { "href": baseURL + '/' + dataUser.ID },
+        },
+        "ID": dataUser.ID,
+        "Name": dataUser.Name,
+        "Pseudo" : dataUser.Pseudo
+    };
+}
+
+
+module.exports = { halLinkObject, mapTerrainResourceObject, mapReservationResourceObject, mapAllReservationResourceObject, mapAllTerrainResourceObject, mapAllUserResourceObject, mapUserIdResourceObject };
