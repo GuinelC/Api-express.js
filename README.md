@@ -235,7 +235,7 @@ Nous devont faire nos test avec des requêtes CURL.
 
 ### User : Voici différentes requêtte curl, pour effectuer des actions sur des USERS ->
 
-// CURL - POST USER \\ EX-1
+## CURL - POST USER \\ EX-1
 ** Dans cet exemple, il suffit de définir de nouvelles données et de les exécuter pour obtenir un post en bdd
 
 curl -X POST -H "Content-Type: application/json" -d '{
@@ -245,8 +245,8 @@ curl -X POST -H "Content-Type: application/json" -d '{
    }' http://localhost:5001/user
 
 
-// CURL - PUT USER \\ EX-2
- ## Attention ! à la valeur de l'id défini dans l'url, il s'agit du user que vous modifier 
+## CURL - PUT USER \\ EX-2
+Attention ! à la valeur de l'id défini dans l'url, il s'agit du user que vous modifier 
 
 curl -X PUT -H "Content-Type: application/json" -d '{
     "name": "John",
@@ -255,16 +255,16 @@ curl -X PUT -H "Content-Type: application/json" -d '{
   }' http://localhost:5001/user/1
 
 
-// CURL - DELETE USER \\ EX-3
- ## Attention ! à la valeur de l'id défini dans l'url, il s'agit du user qui sera supprimer
+## CURL - DELETE USER \\ EX-3
+Attention ! à la valeur de l'id défini dans l'url, il s'agit du user qui sera supprimer
 
  curl -X DELETE http://localhost:5001/user/1   
 
 
 
 ### Terrain : Voici différentes requêtte curl, pour effectuer des actions sur des terrains ->
-// CURL - POST TERRAINS \\ EX-1
-## Dans cet exemple, il suffit de définir de nouvelles données et de les exécuter pour obtenir un post en bdd
+##CURL - POST TERRAINS \\ EX-1
+Dans cet exemple, il suffit de définir de nouvelles données et de les exécuter pour obtenir un post en bdd
 
  curl -X POST -H "Content-Type: application/json" -d '{
    "name": "Y",
@@ -275,8 +275,8 @@ curl -X PUT -H "Content-Type: application/json" -d '{
  }' http://localhost:5001/terrain
 
 
-// CURL - PUT TERRAINS \\ EX-2
- ## Ex : Attention ! value max "name" = 9 !!, la valeur défini dans l'id de l'url correspond au put : id que vous modifier
+## CURL - PUT TERRAINS \\ EX-2
+Ex : Attention ! value max "name" = 9 !!, la valeur défini dans l'id de l'url correspond au put : id que vous modifier
 
  curl -X PUT -H "Content-Type: application/json" -d '{
    "name": "X",
@@ -288,14 +288,14 @@ curl -X PUT -H "Content-Type: application/json" -d '{
 
 
 
-// CURL - DELETE TERRAIN \\ EX-3
-## Attention ! à la valeur de l'id défini dans l'url, il s'agit du terrain qui sera supprimer
+## CURL - DELETE TERRAIN \\ EX-3
+Attention ! à la valeur de l'id défini dans l'url, il s'agit du terrain qui sera supprimer
 
 curl -X DELETE http://localhost:5001/terrain/5 
 
 
 
-### Reservation : Voici différentes requêtte curl, pour effectuer des actions sur des RESERVATIONS ->
+## Reservation : Voici différentes requêtte curl, pour effectuer des actions sur des RESERVATIONS ->
 Pour effectuer un POST pour une réservation, il vous faut respecter des critères:
 - vérifier d'avoir les données nécessaires en bdd, [user, terrain] avant de faire une requête
 - Impératif de réserver un crénaux horaire sur les heures d'ouverture de 10h - 22H.
@@ -304,15 +304,15 @@ Pour effectuer un POST pour une réservation, il vous faut respecter des critèr
 
 Si cela n'est pas respecté ! aucune reservation de sera valider.
 
-// CURL - POST RESERVATION \\ EX-1
+## CURL - POST RESERVATION \\ EX-1
 Vous devez choisir un userId, une date de début, et la durée de 45min
-##  Attention ! à la valeur de l'id définie dans l'url, il s'agit de l'id du terrain qui s'apprête à recevoir la réservation.
+Attention ! à la valeur de l'id définie dans l'url, il s'agit de l'id du terrain qui s'apprête à recevoir la réservation.
 
 curl -X POST -H "Content-Type: application/json" -d '{"userId": 3, "dateTimeStart": "2023-01-02T17:00:00", "duration": 45}' http://localhost:5001/terrain/4/reservation
 
 
-// CURL - PUT RESERVATION \\
-##  Attention ! à la valeur de l'id définie dans l'url, il s'agit de l'id de la reservation qui s'apprête à recevoir la modification.
+## CURL - PUT RESERVATION \\
+Attention ! à la valeur de l'id définie dans l'url, il s'agit de l'id de la reservation qui s'apprête à recevoir la modification.
    curl -X PUT -H "Content-Type: application/json" -d '{
        "userId": 2,
        "terrainId": 1,
@@ -321,8 +321,8 @@ curl -X POST -H "Content-Type: application/json" -d '{"userId": 3, "dateTimeStar
   }' http://localhost:5001/reservation/2
 
 
-// CURL -  DELETE RESERVATION \\ 
-##  Attention ! à la valeur de l'id définie dans l'url, il s'agit de l'id de la reservation qui s'apprête à être supprimer.
+## CURL -  DELETE RESERVATION \\ 
+Attention ! à la valeur de l'id définie dans l'url, il s'agit de l'id de la reservation qui s'apprête à être supprimer.
 
 curl -X DELETE http://localhost:5001/reservation/2
 
@@ -346,7 +346,7 @@ L'administrateur est autorisé à effectuer des actions qui ne sont pas accessib
 Vérification des champs renseignés et validation ou non de la connexion, Pour l'administrateur, les identifiants sont dans l'énoncé du projet.
 
 
-## Améliorations
+### Améliorations
 Gestion de l'authentification reste à terminer
 Seule un utilisateur authentifié peux réserver un terrain
 Gestion de l'admin pour l'indisponibilité d'un terrain, les jours de pluie.
