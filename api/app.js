@@ -9,7 +9,7 @@ var swaggerFile = require('./swagger_output.json');
 var app = express();
 
 // Routing
-var indexRouter = require('./routes/index');
+var indexRouter = require('./routes');
 var terrainRouter = require('./routes/terrain');
 var reservationRouter = require('./routes/reservation');
 var userRouter = require('./routes/user');

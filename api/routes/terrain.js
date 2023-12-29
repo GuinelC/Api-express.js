@@ -209,8 +209,6 @@ router.delete('/:id', async function (req, res, next) {
 // curl -X DELETE http://localhost:5001/terrain/5
 
 
-
-
 // POST a new reservation for a specific terrain
 router.post('/:id/reservation', async function (req, res, next) {
   const terrainId = req.params.id;
@@ -239,17 +237,45 @@ router.post('/:id/reservation', async function (req, res, next) {
     const reservationWeekDayUnit = new Date(dateTimeStart).getDay();
     const DayOffUnit = 0; // Dimanche
 
-    
-
     console.log('Opening Time:', openingTime);
     console.log('Closing Time:', closingTime);
     console.log('Reservation Time:', reservationDateTime);
   
-   // Vérification de la disponibilité du terrain aux horaires demandés
+    // Vérification de la disponibilité du terrain aux horaires demandés
     if (reservationDateTime.getHours() < openingTime.getHours() || reservationDateTime.getHours() >= closingTime.getHours() || reservationWeekDayUnit == DayOffUnit) {
       console.log('Terrain is closed at the requested time.');
       return res.status(400).json({ "msg": "Terrain is closed at the requested time." });
     }
+
+    // Vérification qu'il n'y a pas déjà une réservation pour ces horaires
+    const [existingReservation] = await conn.execute('SELECT * FROM Reservation WHERE Terrain_ID = ? AND DateTimeStart = ?',
+      [terrainId, dateTimeStart]);
+
+    if (existingReservation.length > 0) {
+      console.log('A reservation already exists for the specified time on this terrain.');
+      return res.status(400).json({ "msg": "A reservation already exists for the specified time on this terrain." });
+    }  
+
+
+// Vérification de la durée avec les réservations suivantes
+    const [lastReservation] = await conn.execute('SELECT * FROM Reservation WHERE Terrain_ID = ? AND DateTimeStart <= ? ORDER BY DateTimeStart DESC LIMIT 1',
+      [terrainId, reservationDateTime]);
+
+    if (lastReservation.length > 0) {
+      const lastReservationFinish = new Date(lastReservation[0].DateTimeStart.getTime() + lastReservation[0].Duration * 60 * 1000);
+      // const minimumNextReservationStart = new Date(lastReservationFinish.getTime() + 60 * 1000); // Ajoute une minute
+      const minimumNextReservationStart = new Date(lastReservationFinish.getTime() + 1000); // Ajoute 1 seconde
+
+
+      if (reservationDateTime < minimumNextReservationStart) {
+        console.log('New reservation should start immediately after the end of the last reservation.');
+        console.log('Last Reservation Finish:', lastReservationFinish);
+        console.log('Minimum Next Reservation Start:', minimumNextReservationStart);
+        return res.status(400).json({ "msg": "New reservation should start immediately after the end of the last reservation." });
+      }
+    }
+
+
 
     // Ajoutez la logique pour enregistrer la réservation dans la base de données
     const [result] = await conn.execute('INSERT INTO Reservation (User_ID, Terrain_ID, DateTimeStart, Duration) VALUES (?, ?, ?, ?)',
@@ -272,7 +298,9 @@ router.post('/:id/reservation', async function (req, res, next) {
   }
 });
 
+
+
   // Exempe curl -> POST RESERVATION
     // curl -X POST -H "Content-Type: application/json" -d '{"userId": 1, "dateTimeStart": "2023-01-01T14:00:00", "duration": 45}' http://localhost:5001/terrain/2/reservation
-    
+
 module.exports = router;

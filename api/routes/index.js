@@ -19,8 +19,7 @@ router.get('/', async function (req, res, next) {
       }
     });
 
-    // res.render('index', { title: 'RESTful web api', 'users': users });
-    res.render('index', { title: 'RESTful web api', users });
+    res.render('index', { title: '{ API } . Terrain Tennis', users});
 
 
   } catch (error) {

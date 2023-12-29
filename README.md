@@ -17,7 +17,6 @@ Un *starter pack* dockerisé d'une application web node.js pour développer une 
   - [Documentation de l'API avec Swagger](#documentation-de-lapi-avec-swagger)
   - [Installer et servir de nouvelles dépendances](#installer-et-servir-de-nouvelles-dépendances)
   - [Arrêter le projet](#arrêter-le-projet)
-  - [Améliorations](#améliorations)
   - [Conseils pour le développement](#conseils-pour-le-développement)
   - [Modules Node.Js notables](#modules-nodejs-notables)
   - [Ressources](#ressources)
@@ -26,6 +25,9 @@ Un *starter pack* dockerisé d'une application web node.js pour développer une 
     - [Swagger](#swagger)
     - [SGBDR](#sgbdr)
     - [Adminer](#adminer)
+  -  [Api express TENNIS] (#)
+  - [Requêttes CURL](CONCEPTION)
+  - [Améliorations](#améliorations)
 
 
 ## Prérequis
@@ -120,33 +122,6 @@ Pour accéder à la base de données :
 - *Depuis* un autre conteneur (Node.js, Adminer) : `host` est `db`, le nom du service sur le réseau Docker
 - *Depuis* la machine hôte (une application node, PHP exécutée sur votre machine, etc.) : `host` est `localhost` ou `127.0.0.1`. **Préférer utiliser l'adresse IP `127.0.0.1` plutôt que son alias `localhost`** pour faire référence à votre machine (interface réseau qui) afin éviter des potentiels conflits de configuration avec le fichier [socket](https://www.jetbrains.com/help/datagrip/how-to-connect-to-mysql-with-unix-sockets.html) (interface de connexion sous forme de fichier sur les systèmes UNIX) du serveur MySQL installé sur votre machine hôte (si c'est le cas).
 
-<!-- 
-Depuis un script PHP sur la machine hote : 
-
-- new PDO('mysql:host=localhost:5002;dbname=mydb', $user, $pass); OK
-- new PDO('mysql:host=127.0.0.1:5002;dbname=mydb', $user, $pass); OK
-- new PDO('mysql:host=127.0.0.1;dbname=mydb;port=5002', $user, $pass); OK
-- new PDO('mysql:host=localhost;dbname=mydb;port=5002', $user, $pass); ERREUR ! Ici le port est ignoré et la connexion se fait par le socket de l'installation de mysql sur ma machine hote. Donc, le script PHP ne requête pas le serveur MySQL sur le conteneur mais celui sur ma machine hote. Cela se voit si on arrete le service MySQL sur la machine hote (systemctl stop/restart mysql)
-~~~php
-//Exemple en PHP
-<?php
-$user='root';
-$pass='root';
-$dbh = new PDO('mysql:host=127.0.0.1;port=5002;dbname=mydb', $user, $pass);
-$ps = $dbh->query('SELECT * FROM User;');
-$users = $ps->fetchAll();
-var_dump($users);
-~~~
-
-Différence entre utiliser 127.0.0.1 et localhost :
-
-Lorsque vous utilisez l'hôte "localhost", PDO essaie de se connecter à MySQL en utilisant un socket local plutôt que par TCP/IP. Le chemin du socket varie en fonction de la configuration de MySQL et de votre système.
-
-Lorsque vous utilisez "127.0.0.1" comme hôte, PDO se connecte à MySQL en utilisant TCP/IP sur le port par défaut (généralement 3306) au lieu d'utiliser un socket local, sauf si le port est spécifié dans le DSN. Cela peut contourner les problèmes liés à la résolution du nom de socket local.
-
-En conclusion : préférer utiliser 127.0.0.1 plutot que localhost pout s'épargner des conflits de configuration et être sûr de requêter le serveur MySQL conteneurisé.
- -->
-
 ### ORM
 
 Pour interagir avec la base de données SQL, nous pouvons utiliser l'ORM [Sequelize](https://sequelize.org)
@@ -215,8 +190,6 @@ Il restes des choses à faire...
 - [cors](https://www.npmjs.com/package/cors), un module middleware pour gérer la politique CORS (*Cross Origin Resource Sharing*)
 - [mysql2](https://www.npmjs.com/package/mysql2), un client MySQL pour Node.js qui [utilise l'API des promesses](https://www.npmjs.com/package/mysql2#using-promise-wrapper) (contrairement à son prédécesseur [mysql](https://www.npmjs.com/package/mysql))
 
-## Gestions des rôles
-  L'Administrateur n'a pas le même rôle, donc il pourra effectuer d'autres actions qu'un user classique.
 
 
 ## Ressources
@@ -249,16 +222,131 @@ Il restes des choses à faire...
 - [mysql2](https://www.npmjs.com/package/mysql2), le driver node.js pour le SGBDR MySQL qui implémente l'API des promesses (contrairement à [mysql](https://www.npmjs.com/package/mysql))
 - [Sequelize, Getting Started](https://sequelize.org/docs/v6/getting-started/), Sequelize, un ORM pour Node.js
 
-### Adminer
 
+
+### Adminer
 Pour la base de donnée:
 - [Adminer](https://www.adminer.org/)
-# Api-express.js
+
+# Api-express.j : TENNIS
 
 * Test des requêttes en CURL -> 
+Nous devont faire nos test avec des requêtes CURL. 
 
-- User : 
-- Terrain :
-- Reservation :
+### User : Voici différentes requêtte curl, pour effectuer des actions sur des USERS ->
+
+// CURL - POST USER \\ EX-1
+** Dans cet exemple, il suffit de définir de nouvelles données et de les exécuter pour obtenir un post en bdd
+
+curl -X POST -H "Content-Type: application/json" -d '{
+     "name": "Nouvel4 Utilisateur",
+     "pseudo": "nouveau4_pseudo",
+     "password": "nouveau_mot_de_passe"
+   }' http://localhost:5001/user
 
 
+// CURL - PUT USER \\ EX-2
+ ## Attention ! à la valeur de l'id défini dans l'url, il s'agit du user que vous modifier 
+
+curl -X PUT -H "Content-Type: application/json" -d '{
+    "name": "John",
+    "pseudo": "Johny",
+    "password": "JohnyPass"
+  }' http://localhost:5001/user/1
+
+
+// CURL - DELETE USER \\ EX-3
+ ## Attention ! à la valeur de l'id défini dans l'url, il s'agit du user qui sera supprimer
+
+ curl -X DELETE http://localhost:5001/user/1   
+
+
+
+### Terrain : Voici différentes requêtte curl, pour effectuer des actions sur des terrains ->
+// CURL - POST TERRAINS \\ EX-1
+## Dans cet exemple, il suffit de définir de nouvelles données et de les exécuter pour obtenir un post en bdd
+
+ curl -X POST -H "Content-Type: application/json" -d '{
+   "name": "Y",
+   "openingTime": "10:00:00",
+   "closingTime": "22:00:00",
+   "daysOff": "Dimanche",
+   "dispo": 1
+ }' http://localhost:5001/terrain
+
+
+// CURL - PUT TERRAINS \\ EX-2
+ ## Ex : Attention ! value max "name" = 9 !!, la valeur défini dans l'id de l'url correspond au put : id que vous modifier
+
+ curl -X PUT -H "Content-Type: application/json" -d '{
+   "name": "X",
+   "openingTime": "10:00:00",
+   "closingTime": "22:00:00",
+   "daysOff": "Dimanche",
+   "dispo": 1
+ }' http://localhost:5001/terrain/4
+
+
+
+// CURL - DELETE TERRAIN \\ EX-3
+## Attention ! à la valeur de l'id défini dans l'url, il s'agit du terrain qui sera supprimer
+
+curl -X DELETE http://localhost:5001/terrain/5 
+
+
+
+### Reservation : Voici différentes requêtte curl, pour effectuer des actions sur des RESERVATIONS ->
+Pour effectuer un POST pour une réservation, il vous faut respecter des critères:
+- vérifier d'avoir les données nécessaires en bdd, [user, terrain] avant de faire une requête
+- Impératif de réserver un crénaux horaire sur les heures d'ouverture de 10h - 22H.
+- Vous devez absolument choisir un autre jour que le Dimanche, qui est le jour de fermeture.
+- Pour empêcher deux réservations simultanées sur le même terrain, une vérification est effectuée pour s'assurer que l'heure de début de la nouvelle réservation n'entre pas en conflit avec l'heure de fin de la dernière réservation sur ce terrain. Si la nouvelle réservation commence avant la fin de la dernière réservation, elle est refusée pour assurer une allocation non simultanée du terrain.
+
+Si cela n'est pas respecté ! aucune reservation de sera valider.
+
+// CURL - POST RESERVATION \\ EX-1
+Vous devez choisir un userId, une date de début, et la durée de 45min
+##  Attention ! à la valeur de l'id définie dans l'url, il s'agit de l'id du terrain qui s'apprête à recevoir la réservation.
+
+curl -X POST -H "Content-Type: application/json" -d '{"userId": 3, "dateTimeStart": "2023-01-02T17:00:00", "duration": 45}' http://localhost:5001/terrain/4/reservation
+
+
+// CURL - PUT RESERVATION \\
+##  Attention ! à la valeur de l'id définie dans l'url, il s'agit de l'id de la reservation qui s'apprête à recevoir la modification.
+   curl -X PUT -H "Content-Type: application/json" -d '{
+       "userId": 2,
+       "terrainId": 1,
+       "dateTimeStart": "2023-01-02 15:30:00",
+       "duration": 45
+  }' http://localhost:5001/reservation/2
+
+
+// CURL -  DELETE RESERVATION \\ 
+##  Attention ! à la valeur de l'id définie dans l'url, il s'agit de l'id de la reservation qui s'apprête à être supprimer.
+
+curl -X DELETE http://localhost:5001/reservation/2
+
+
+
+### Consommer les différentes ressources
+La liste des users: http://localhost:5001/user
+un user ciblée avec id : http://localhost:5001/user/1
+
+La liste des terrains: http://localhost:5001/terrain
+un terrain ciblée avec id : http://localhost:5001/terrain/2
+
+La liste des Reservations: http://localhost:5001/reservation
+une Reservation ciblée avec id : http://localhost:5001/reservation/3
+
+
+### Gestion des rôles
+L'administrateur est autorisé à effectuer des actions qui ne sont pas accessibles à un user standard.
+
+### Login
+Vérification des champs renseignés et validation ou non de la connexion, Pour l'administrateur, les identifiants sont dans l'énoncé du projet.
+
+
+## Améliorations
+Gestion de l'authentification reste à terminer
+Seule un utilisateur authentifié peux réserver un terrain
+Gestion de l'admin pour l'indisponibilité d'un terrain, les jours de pluie.

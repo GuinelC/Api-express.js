@@ -2,8 +2,22 @@ extends layout
 
 block content
   h1= title
-  p Welcome to the #{title} !
-  h2 Liste des utilisateur·ices de l'application
+  p L'API est structurée selon le modèle HAL (Hypertext Application Language), un format de représentation des ressources RESTful. Chaque ressource est présentée avec des liens hypertextes permettant la navigation entre les ressources associées. Les informations sont encapsulées dans des objets JSON, facilitant la découverte et l'accès aux données. Cette approche favorise la simplicité, la flexibilité et l'interopérabilité dans le développement et la consommation de l'API.
+
+  h4 { API } Terrain Tennis vous met à disposition ses ressources :
+
   ul
-    each user in users
-      li= user.firstName
+    li
+      a(href='/user', class='nav-link') / Users
+    li
+      a(href='/terrain', class='nav-link') / Terrains
+    li
+      a(href='/reservation', class='nav-link') / Reservations
+
+
+  h3 N'hésitez à tester mes ressources, vous avez des requêtes préparées en CURL à consulter dans le ReadMe:
+
+  a(href='https://github.com/GuinelC/Api-express.js', target='_blank') Dépot GIT
+  i.fa-brands.fa-github
+
+

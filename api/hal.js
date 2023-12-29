@@ -33,7 +33,7 @@ function mapAllTerrainResourceObject(dataTerrain, baseURL){
             "self": halLinkObject(baseURL, 'string'), 
         },
         "ID": dataTerrain.ID,
-        "Name": dataTerrain.TerrainName,
+        "Name": dataTerrain.Name,
         "OpeningTime": dataTerrain.OpeningTime,
         "ClosingTime": dataTerrain.ClosingTime,
         "DaysOff": dataTerrain.DaysOff,

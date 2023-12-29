@@ -33,10 +33,12 @@ router.get("/", async function (req, res, next) {
   console.log('fin get');
 });
 
+
+
 router.post("/", async function (req, res, next) {
     const conn = await db.mysql.createConnection(db.dsn);
    
-    const { pseudo, password } = req.body; // Utilisez pseudo au lieu de username
+    const { pseudo, password } = req.body; 
    
     console.log("req.body:", req.body);
     console.log("pseudo:", pseudo);
@@ -54,14 +56,13 @@ router.post("/", async function (req, res, next) {
       console.log("Rows:", rows);
         
       if (rows.length > 0) {
+            // Si le rôle est égal à 1, rediriger vers ...
             if (rows[0].role === 1) {
-            // Si le rôle est égal à 1, rediriger vers reservation.pug
             return res.redirect("/adminTerrain");
             }
         }
 
       if (rows.length > 0) {
-        // res.redirect("/courts");
         // Redirige l'utilisateur vers la page d'accueil après la connexion
         res.render("login", {
           message: `vous êtes connecté ${pseudo}`,
@@ -80,14 +81,5 @@ router.post("/", async function (req, res, next) {
     }
 });
 
-
-//   router.get('/', (req, res) => {
-//     if (req.session.pseudo) {
-//       res.send(`Bienvenue sur votre profil, ${req.session.pseudo}!`);
-//     } else {
-//       res.redirect('/login'); // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-//     }
-//   });
-  
   module.exports = router;
   

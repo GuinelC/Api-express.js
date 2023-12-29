@@ -1,5 +1,69 @@
 body {
-  padding: 50px;
+  margin: 0;
+  padding: 0;
   font: 14px serif, Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
+nav{
+  background-color: gray;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+ul{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 88%;
+  margin-top: 40px;
+  margin-bottom: 60px;
+}
+
+li{
+  list-style: none;
+}
+
+a{
+  text-decoration: none;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+  font-size: 20px;
+}
+
+h1{
+  font-size: 75px;
+}
+
+p{
+  text-align: center;
+  width: 50%;
+  font-size: 18px;
+}
+
+h4{
+  font-size: 23px;
+}
+.nav-link {
+  text-decoration: none; 
+  color: #313131;
+  padding: 8px 12px; 
+  border-radius: 3px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  transition: box-shadow 0.3s ease;
+  background-color: rgb(163, 163, 163);
+}
+
+.nav-link:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); 
+}
+
+.fa-github{
+  font-size: 23px;
+}
